@@ -16,7 +16,6 @@ const RecommendedAgents: React.FC<RecommendedAgentsProps> = ({ nodeId }) => {
   
   if (recommendedAgents.length === 0) return null;
   
-  // Find the source node position
   const handleAddRecommended = (type: AgentType) => {
     const sourceNode = nodes.find(node => node.id === nodeId);
     if (!sourceNode) return;
@@ -42,23 +41,23 @@ const RecommendedAgents: React.FC<RecommendedAgentsProps> = ({ nodeId }) => {
   };
 
   return (
-    <div className="recommended-agents slide-in py-2 px-3 bg-card/80 backdrop-blur-sm border rounded-lg shadow-sm">
-      <div className="flex items-center gap-1 mb-2 text-xs font-medium">
+    <div className="recommended-agents slide-in py-3 px-4 bg-card/90 backdrop-blur-sm border rounded-lg shadow-md min-w-[260px] max-w-[280px] mx-auto mb-6">
+      <div className="flex items-center gap-2 mb-3 text-xs font-medium">
         <Lightbulb size={14} className="text-amber-400" />
         <span>Recommended Next Steps</span>
       </div>
       
-      <div className="space-y-1">
+      <div className="space-y-2">
         {recommendedAgents.map((agentType) => (
           <button
             key={agentType}
             onClick={() => handleAddRecommended(agentType)}
-            className="w-full text-left flex items-center gap-2 p-1.5 text-xs rounded hover:bg-muted/50 transition-colors"
+            className="w-full text-left flex items-center gap-2 p-2 text-xs rounded hover:bg-muted/50 transition-colors"
           >
             {getIcon(agentType)}
-            <div>
+            <div className="flex-1 overflow-hidden">
               <div className="font-medium">{agentType.replace('Agent', '')}</div>
-              <div className="text-xxs text-muted-foreground truncate max-w-[200px]">
+              <div className="text-xxs text-muted-foreground truncate max-w-full">
                 {getAgentDescription(agentType)}
               </div>
             </div>

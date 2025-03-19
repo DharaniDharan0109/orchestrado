@@ -254,7 +254,7 @@ const Index = () => {
               className="bg-card/80 backdrop-blur-sm rounded-lg border shadow-md"
             />
             
-            <Panel position="top-right" className="space-x-2">
+            <Panel position="top-right" className="flex gap-2 mt-4 mr-4">
               <WorkflowGenerator />
               
               <Button 
@@ -294,7 +294,7 @@ const Index = () => {
               </Button>
             </Panel>
             
-            <Panel position="bottom-left" className="space-x-2">
+            <Panel position="bottom-left" className="flex gap-2 mb-4 ml-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -355,13 +355,13 @@ const Index = () => {
             </Panel>
             
             {showRecommendations && (
-              <Panel position="bottom-center">
+              <Panel position="bottom" className="flex justify-center w-full mb-4">
                 <RecommendedAgents nodeId={showRecommendations} />
               </Panel>
             )}
             
             {nodes.length === 0 && (
-              <Panel position="top-center">
+              <Panel position="top-center" className="mt-10">
                 <div className="bg-card/80 backdrop-blur-sm p-6 rounded-lg border shadow-md text-center max-w-lg animate-fade-in">
                   <h3 className="text-lg font-semibold mb-2">Welcome to AI Workflow Orchestrator</h3>
                   <p className="text-sm text-muted-foreground mb-4">
