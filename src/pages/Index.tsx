@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import {
   ReactFlow,
@@ -57,13 +56,11 @@ const Index = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
 
-  // Handle drag over
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  // Handle drop
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -90,20 +87,17 @@ const Index = () => {
     [addNode, screenToFlowPosition, toast]
   );
 
-  // Handle node click
   const onNodeClick = (_: any, node: any) => {
     setSelectedNode(node.id);
     setShowEditor(true);
     setShowRecommendations(node.id);
   };
 
-  // Handle pane click
   const onPaneClick = () => {
     setSelectedNode(null);
     setShowRecommendations(null);
   };
 
-  // Run the flow
   const handleRunFlow = () => {
     if (nodes.length === 0) {
       toast({
@@ -119,14 +113,11 @@ const Index = () => {
       description: "Your AI workflow is now running...",
     });
 
-    // Run all nodes in topological order (simplified)
     nodes.forEach((node, index) => {
       setTimeout(() => {
         useFlowStore.getState().updateNodeStatus(node.id, 'running');
         
-        // Simulate processing
         setTimeout(() => {
-          // 80% chance of success
           const success = Math.random() > 0.2;
           useFlowStore.getState().updateNodeStatus(node.id, success ? 'success' : 'error');
           
@@ -138,11 +129,10 @@ const Index = () => {
             });
           }
         }, 1000);
-      }, index * 700); // Stagger starts
+      }, index * 700);
     });
   };
 
-  // Export flow as JSON
   const handleExportFlow = () => {
     if (nodes.length === 0) {
       toast({
@@ -169,7 +159,6 @@ const Index = () => {
     });
   };
 
-  // Import flow from JSON
   const handleImportFlow = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -185,7 +174,6 @@ const Index = () => {
           const parsed = JSON.parse(event.target?.result as string);
           
           if (parsed.nodes && parsed.edges) {
-            // Set the nodes and edges directly in the store
             useFlowStore.setState({ nodes: parsed.nodes, edges: parsed.edges });
             
             toast({
@@ -208,7 +196,6 @@ const Index = () => {
     input.click();
   };
 
-  // Handle theme toggle
   const handleThemeToggle = () => {
     toggleTheme();
     toast({
@@ -267,7 +254,6 @@ const Index = () => {
               className="bg-card/80 backdrop-blur-sm rounded-lg border shadow-md"
             />
             
-            {/* Top Panel - Action buttons */}
             <Panel position="top-right" className="space-x-2">
               <WorkflowGenerator />
               
@@ -308,7 +294,6 @@ const Index = () => {
               </Button>
             </Panel>
             
-            {/* Bottom Panel - Utilities */}
             <Panel position="bottom-left" className="space-x-2">
               <Button
                 variant="outline"
@@ -369,14 +354,12 @@ const Index = () => {
               </Button>
             </Panel>
             
-            {/* Recommended agents panel */}
             {showRecommendations && (
               <Panel position="bottom-center">
                 <RecommendedAgents nodeId={showRecommendations} />
               </Panel>
             )}
             
-            {/* First-time user guide */}
             {nodes.length === 0 && (
               <Panel position="top-center">
                 <div className="bg-card/80 backdrop-blur-sm p-6 rounded-lg border shadow-md text-center max-w-lg animate-fade-in">

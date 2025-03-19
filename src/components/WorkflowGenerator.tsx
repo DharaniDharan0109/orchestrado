@@ -43,7 +43,9 @@ export const WorkflowGenerator = () => {
   const examples = [
     "Scrape news articles, analyze text with NLP, and fact-check the information",
     "Extract data from websites and store verified information on blockchain",
-    "Process text content using NLP and record the results"
+    "Process text content using NLP and record the results",
+    "Crawl multiple sites, analyze sentiment, verify facts, and log results",
+    "Extract content from PDFs, process with AI, and summarize key findings"
   ];
 
   const loadExample = (example: string) => {

@@ -16,8 +16,8 @@ const RecommendedAgents: React.FC<RecommendedAgentsProps> = ({ nodeId }) => {
   
   if (recommendedAgents.length === 0) return null;
   
+  // Find the source node position
   const handleAddRecommended = (type: AgentType) => {
-    // Find the source node position
     const sourceNode = nodes.find(node => node.id === nodeId);
     if (!sourceNode) return;
     
