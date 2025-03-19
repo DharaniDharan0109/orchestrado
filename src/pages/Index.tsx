@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import {
   ReactFlow,
@@ -8,7 +7,6 @@ import {
   Panel,
   useReactFlow,
 } from '@xyflow/react';
-import 'react-toastify/dist/ReactToastify.css';
 import '@xyflow/react/dist/style.css';
 
 import useFlowStore, { AgentType } from '@/store/flowStore';
@@ -227,7 +225,6 @@ const Index = () => {
   );
 };
 
-// Wrap the component with ReactFlow provider
 const FlowWithProvider = () => {
   return (
     <ReactFlow>
