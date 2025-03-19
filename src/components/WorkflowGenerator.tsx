@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MagicWand, BookOpen, X } from 'lucide-react';
+import { Wand, BookOpen, X } from 'lucide-react';
 import useFlowStore from '@/store/flowStore';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -58,7 +58,7 @@ export const WorkflowGenerator = () => {
         className="gap-1" 
         onClick={() => setOpen(true)}
       >
-        <MagicWand size={14} /> Auto-Generate
+        <Wand size={14} /> Auto-Generate
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -103,7 +103,7 @@ export const WorkflowGenerator = () => {
               </Button>
             </DialogClose>
             <Button onClick={handleGenerate}>
-              <MagicWand size={14} className="mr-1" /> Generate Workflow
+              <Wand size={14} className="mr-1" /> Generate Workflow
             </Button>
           </DialogFooter>
         </DialogContent>
