@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import {
   ReactFlow,
@@ -13,8 +14,22 @@ import useFlowStore, { AgentType } from '@/store/flowStore';
 import { nodeTypes } from '@/components/nodes/AgentNodes';
 import Sidebar from '@/components/Sidebar';
 import PropertyEditor from '@/components/PropertyEditor';
+import RecommendedAgents from '@/components/RecommendedAgents';
+import WorkflowGenerator from '@/components/WorkflowGenerator';
 import { Button } from '@/components/ui/button';
-import { Play, Save, FileUp, FileDown } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
+import { 
+  Play, 
+  Save, 
+  FileUp, 
+  FileDown, 
+  Undo2, 
+  Redo2, 
+  Grid, 
+  Sun, 
+  Moon 
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const {
@@ -27,10 +42,18 @@ const Index = () => {
     setSelectedNode,
     saveFlow,
     loadFlow,
-    selectedNode
+    resetFlow,
+    selectedNode,
+    gridSnap,
+    toggleGridSnap,
+    undo,
+    redo
   } = useFlowStore();
   
+  const { theme, toggleTheme } = useTheme();
+  const { toast } = useToast();
   const [showEditor, setShowEditor] = useState(false);
+  const [showRecommendations, setShowRecommendations] = useState<string | null>(null);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -58,23 +81,44 @@ const Index = () => {
       });
 
       addNode(type, position);
+      
+      toast({
+        title: "Agent Added",
+        description: `Added ${type.replace('Agent', '')} agent to your workflow.`,
+      });
     },
-    [addNode, screenToFlowPosition]
+    [addNode, screenToFlowPosition, toast]
   );
 
   // Handle node click
   const onNodeClick = (_: any, node: any) => {
     setSelectedNode(node.id);
     setShowEditor(true);
+    setShowRecommendations(node.id);
   };
 
   // Handle pane click
   const onPaneClick = () => {
     setSelectedNode(null);
+    setShowRecommendations(null);
   };
 
-  // Run or export the flow
+  // Run the flow
   const handleRunFlow = () => {
+    if (nodes.length === 0) {
+      toast({
+        title: "Empty Workflow",
+        description: "Please add agents to your workflow before running.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Workflow Started",
+      description: "Your AI workflow is now running...",
+    });
+
     // Run all nodes in topological order (simplified)
     nodes.forEach((node, index) => {
       setTimeout(() => {
@@ -85,6 +129,14 @@ const Index = () => {
           // 80% chance of success
           const success = Math.random() > 0.2;
           useFlowStore.getState().updateNodeStatus(node.id, success ? 'success' : 'error');
+          
+          if (!success) {
+            toast({
+              title: "Error in Workflow",
+              description: `${node.data.label} encountered an issue during execution.`,
+              variant: "destructive"
+            });
+          }
         }, 1000);
       }, index * 700); // Stagger starts
     });
@@ -92,6 +144,15 @@ const Index = () => {
 
   // Export flow as JSON
   const handleExportFlow = () => {
+    if (nodes.length === 0) {
+      toast({
+        title: "Empty Workflow",
+        description: "There's nothing to export. Please create a workflow first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const dataStr = JSON.stringify({ nodes, edges }, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
     
@@ -101,6 +162,11 @@ const Index = () => {
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
+    
+    toast({
+      title: "Workflow Exported",
+      description: "Your workflow has been exported as JSON.",
+    });
   };
 
   // Import flow from JSON
@@ -121,15 +187,34 @@ const Index = () => {
           if (parsed.nodes && parsed.edges) {
             // Set the nodes and edges directly in the store
             useFlowStore.setState({ nodes: parsed.nodes, edges: parsed.edges });
+            
+            toast({
+              title: "Workflow Imported",
+              description: `Imported ${parsed.nodes.length} agents and ${parsed.edges.length} connections.`,
+            });
           }
         } catch (error) {
           console.error('Failed to parse workflow file:', error);
+          toast({
+            title: "Import Failed",
+            description: "The selected file is not a valid workflow JSON.",
+            variant: "destructive"
+          });
         }
       };
       reader.readAsText(file);
     };
     
     input.click();
+  };
+
+  // Handle theme toggle
+  const handleThemeToggle = () => {
+    toggleTheme();
+    toast({
+      title: theme === 'light' ? "Dark Mode Enabled" : "Light Mode Enabled",
+      description: "UI theme has been updated.",
+    });
   };
 
   return (
@@ -149,14 +234,17 @@ const Index = () => {
             onNodeClick={onNodeClick}
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
+            deleteKeyCode={['Backspace', 'Delete']}
+            snapToGrid={gridSnap}
+            snapGrid={[20, 20]}
             fitView
             fitViewOptions={{ padding: 0.2 }}
             minZoom={0.2}
             maxZoom={4}
-            className="bg-gray-50"
+            className="bg-background"
             proOptions={{ hideAttribution: true }}
           >
-            <Background color="#aaa" gap={16} />
+            <Background color="#aaa" gap={16} size={1} />
             <Controls />
             <MiniMap 
               nodeColor={(node) => {
@@ -176,10 +264,13 @@ const Index = () => {
                 }
               }}
               maskColor="rgba(240, 240, 240, 0.5)"
-              className="bg-white/80 rounded-lg border shadow-md"
+              className="bg-card/80 backdrop-blur-sm rounded-lg border shadow-md"
             />
             
+            {/* Top Panel - Action buttons */}
             <Panel position="top-right" className="space-x-2">
+              <WorkflowGenerator />
+              
               <Button 
                 variant="default" 
                 size="sm" 
@@ -188,6 +279,7 @@ const Index = () => {
               >
                 <Play size={14} /> Run Flow
               </Button>
+              
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -196,6 +288,7 @@ const Index = () => {
               >
                 <Save size={14} /> Save
               </Button>
+              
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -204,6 +297,7 @@ const Index = () => {
               >
                 <FileDown size={14} /> Export
               </Button>
+              
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -213,6 +307,90 @@ const Index = () => {
                 <FileUp size={14} /> Import
               </Button>
             </Panel>
+            
+            {/* Bottom Panel - Utilities */}
+            <Panel position="bottom-left" className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1"
+                onClick={undo}
+                title="Undo last action"
+              >
+                <Undo2 size={14} />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm" 
+                className="gap-1"
+                onClick={redo}
+                title="Redo last action"
+              >
+                <Redo2 size={14} />
+              </Button>
+              
+              <Button
+                variant={gridSnap ? "default" : "outline"}
+                size="sm"
+                className="gap-1"
+                onClick={toggleGridSnap}
+                title={gridSnap ? "Grid snap enabled" : "Grid snap disabled"}
+              >
+                <Grid size={14} />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1"
+                onClick={handleThemeToggle}
+                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              >
+                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1 text-destructive hover:text-destructive"
+                onClick={() => {
+                  if (confirm("Are you sure you want to reset the workflow? This will remove all agents and connections.")) {
+                    resetFlow();
+                    toast({
+                      title: "Workflow Reset",
+                      description: "Your workflow has been cleared.",
+                    });
+                  }
+                }}
+                title="Reset workflow"
+              >
+                <span className="text-destructive">×</span> Clear
+              </Button>
+            </Panel>
+            
+            {/* Recommended agents panel */}
+            {showRecommendations && (
+              <Panel position="bottom-center">
+                <RecommendedAgents nodeId={showRecommendations} />
+              </Panel>
+            )}
+            
+            {/* First-time user guide */}
+            {nodes.length === 0 && (
+              <Panel position="center">
+                <div className="bg-card/80 backdrop-blur-sm p-6 rounded-lg border shadow-md text-center max-w-lg animate-fade-in">
+                  <h3 className="text-lg font-semibold mb-2">Welcome to AI Workflow Orchestrator</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Drag agents from the sidebar onto this canvas to create your AI workflow.
+                    Connect agents together to build powerful automation pipelines.
+                  </p>
+                  <div className="flex justify-center">
+                    <WorkflowGenerator />
+                  </div>
+                </div>
+              </Panel>
+            )}
           </ReactFlow>
         </div>
       </div>
