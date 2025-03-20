@@ -41,18 +41,18 @@ const RecommendedAgents: React.FC<RecommendedAgentsProps> = ({ nodeId }) => {
   };
 
   return (
-    <div className="recommended-agents slide-in py-3 px-4 bg-card/90 backdrop-blur-sm border rounded-lg shadow-md min-w-[260px] max-w-[280px] mx-auto mb-6">
+    <div className="recommended-agents slide-in py-4 px-5 bg-card/90 backdrop-blur-sm border rounded-lg shadow-md w-[300px] mx-auto">
       <div className="flex items-center gap-2 mb-3 text-xs font-medium">
         <Lightbulb size={14} className="text-amber-400" />
         <span>Recommended Next Steps</span>
       </div>
       
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {recommendedAgents.map((agentType) => (
           <button
             key={agentType}
             onClick={() => handleAddRecommended(agentType)}
-            className="w-full text-left flex items-center gap-2 p-2 text-xs rounded hover:bg-muted/50 transition-colors"
+            className="w-full text-left flex items-center gap-2.5 p-2.5 text-xs rounded hover:bg-muted/50 transition-colors"
           >
             {getIcon(agentType)}
             <div className="flex-1 overflow-hidden">

@@ -110,7 +110,7 @@ const TopRightPanel = () => {
   };
 
   return (
-    <Panel position="top-right" className="flex gap-2 mt-4 mr-4">
+    <Panel position="top-right" className="flex gap-2 mt-6 mr-6">
       <WorkflowGenerator />
       
       <Button 

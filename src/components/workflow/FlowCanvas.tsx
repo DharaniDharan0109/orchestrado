@@ -78,7 +78,7 @@ const FlowCanvas = ({ onNodeClick, showRecommendations }: FlowCanvasProps) => {
   };
 
   return (
-    <div ref={reactFlowWrapper} className="flex-1">
+    <div ref={reactFlowWrapper} className="flex-1 h-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -101,7 +101,7 @@ const FlowCanvas = ({ onNodeClick, showRecommendations }: FlowCanvasProps) => {
         proOptions={{ hideAttribution: true }}
       >
         <Background color="#aaa" gap={16} size={1} />
-        <Controls />
+        <Controls position="bottom-right" showInteractive={false} className="m-6" />
         <MiniMap 
           nodeColor={(node) => {
             switch (node.type as AgentType) {
@@ -120,7 +120,7 @@ const FlowCanvas = ({ onNodeClick, showRecommendations }: FlowCanvasProps) => {
             }
           }}
           maskColor="rgba(240, 240, 240, 0.5)"
-          className="bg-card/80 backdrop-blur-sm rounded-lg border shadow-md"
+          className="bg-card/80 backdrop-blur-sm rounded-lg border shadow-md m-6"
         />
         
         <TopRightPanel />

@@ -5,7 +5,7 @@ import WorkflowGenerator from '@/components/WorkflowGenerator';
 
 const EmptyWorkflowMessage = () => {
   return (
-    <Panel position="top-center" className="mt-10">
+    <Panel position="top-center" className="mt-16">
       <div className="bg-card/80 backdrop-blur-sm p-6 rounded-lg border shadow-md text-center max-w-lg animate-fade-in">
         <h3 className="text-lg font-semibold mb-2">Welcome to AI Workflow Orchestrator</h3>
         <p className="text-sm text-muted-foreground mb-4">

@@ -25,7 +25,7 @@ const Index = () => {
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 relative">
         <FlowCanvas 
           onNodeClick={onNodeClick}
           showRecommendations={showRecommendations}

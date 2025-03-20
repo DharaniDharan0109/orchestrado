@@ -21,7 +21,7 @@ const BottomLeftPanel = () => {
   };
 
   return (
-    <Panel position="bottom-left" className="flex gap-2 mb-4 ml-4">
+    <Panel position="bottom-left" className="flex gap-2 mb-6 ml-6">
       <Button
         variant="outline"
         size="sm"
