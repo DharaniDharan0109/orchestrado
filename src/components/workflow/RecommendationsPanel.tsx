@@ -11,7 +11,7 @@ const RecommendationsPanel = ({ nodeId }: RecommendationsPanelProps) => {
   if (!nodeId) return null;
   
   return (
-    <Panel position="bottom" className="flex justify-center w-full mb-8">
+    <Panel position="bottom-center" className="flex justify-center w-full mb-8">
       <div className="mx-auto">
         <RecommendedAgents nodeId={nodeId} />
       </div>
