@@ -14,10 +14,12 @@ import {
   DialogClose
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 
 export const WorkflowGenerator = () => {
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState('');
+  const [workflowName, setWorkflowName] = useState('');
   const { autoGenerateWorkflow } = useFlowStore();
   const { toast } = useToast();
 
@@ -36,7 +38,7 @@ export const WorkflowGenerator = () => {
     
     toast({
       title: "Workflow Generated",
-      description: "Your AI workflow has been generated based on your description.",
+      description: `'${workflowName || 'New workflow'}' has been generated based on your description.`,
     });
   };
 
@@ -72,15 +74,29 @@ export const WorkflowGenerator = () => {
             </DialogDescription>
           </DialogHeader>
           
-          <div className="py-4">
-            <Textarea
-              placeholder="e.g., 'Extract news from websites, process with NLP, verify facts'"
-              className="w-full h-32 resize-none"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+          <div className="py-4 space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="workflow-name" className="text-sm font-medium">Workflow Name</label>
+              <Input
+                id="workflow-name"
+                placeholder="My Workflow"
+                value={workflowName}
+                onChange={(e) => setWorkflowName(e.target.value)}
+              />
+            </div>
             
-            <div className="mt-4">
+            <div className="space-y-2">
+              <label htmlFor="workflow-description" className="text-sm font-medium">Description</label>
+              <Textarea
+                id="workflow-description"
+                placeholder="e.g., 'Extract news from websites, process with NLP, verify facts'"
+                className="w-full h-32 resize-none"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            
+            <div>
               <div className="text-sm font-medium mb-2 flex items-center gap-1">
                 <BookOpen size={14} /> Examples:
               </div>
