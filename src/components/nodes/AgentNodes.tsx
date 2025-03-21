@@ -1,4 +1,3 @@
-
 import React, { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { 
@@ -11,7 +10,7 @@ import {
   AlertTriangle, 
   Loader2
 } from 'lucide-react';
-import { AgentType } from '@/store/flowStore';
+import { AgentType } from '@/store/types/agentTypes';
 
 // Status icon component
 const StatusIcon = ({ status }: { status?: 'idle' | 'running' | 'success' | 'error' }) => {

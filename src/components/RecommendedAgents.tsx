@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Lightbulb } from 'lucide-react';
-import useFlowStore, { AgentType } from '@/store/flowStore';
+import useFlowStore from '@/store/flowStore';
+import { AgentType } from '@/store/types/agentTypes';
 import { getAgentDescription } from '@/components/nodes/AgentNodes';
 import { useToast } from '@/hooks/use-toast';
 

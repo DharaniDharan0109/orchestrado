@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, Fragment } from 'react';
-import useFlowStore, { AgentType } from '@/store/flowStore';
+import useFlowStore from '@/store/flowStore';
+import { AgentType } from '@/store/types/agentTypes';
 import { X, Play, Save, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

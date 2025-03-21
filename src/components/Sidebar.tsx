@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { FileSearch, BrainCircuit, ShieldCheck, Database, Code, Save, Upload, Trash2 } from 'lucide-react';
-import useFlowStore, { AgentType } from '@/store/flowStore';
+import useFlowStore from '@/store/flowStore';
+import { AgentType } from '@/store/types/agentTypes';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from '@/components/ui/button';
 import { getAgentDescription } from './nodes/AgentNodes';
