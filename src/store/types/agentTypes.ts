@@ -19,6 +19,9 @@ export interface AgentNode extends Node {
   };
 }
 
+// Export Edge type for easier imports elsewhere
+export type { Edge } from '@xyflow/react';
+
 // History states for undo/redo functionality
 export interface HistoryState {
   nodes: AgentNode[];

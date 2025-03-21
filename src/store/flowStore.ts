@@ -8,7 +8,8 @@ import {
   Connection,
   addEdge
 } from '@xyflow/react';
-import { AgentNode, AgentType } from './types/agentTypes';
+import { nanoid } from 'nanoid';
+import { AgentNode, AgentType, Edge } from './types/agentTypes';
 import { FlowState } from './types/flowStoreTypes';
 import { snapToGrid, createAgentNode, getRecommendedAgents } from './utils/flowUtils';
 import { generateWorkflow } from './utils/workflowGenerator';
@@ -246,6 +247,6 @@ const useFlowStore = create<FlowState>((set, get) => ({
   }
 }));
 
-// Re-export types for convenience
-export { AgentType, AgentNode } from './types/agentTypes';
+// Re-export types for convenience - fixing the 'isolatedModules' TypeScript error
+export type { AgentType, AgentNode } from './types/agentTypes';
 export default useFlowStore;
