@@ -23,7 +23,7 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
       
       <div className="flex-1 relative">

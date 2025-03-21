@@ -21,18 +21,21 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import useToolStore, { ToolType } from '@/store/toolStore';
 
 interface ToolButtonProps {
   icon: React.ReactNode;
   label: string;
-  onClick: () => void;
+  tool: ToolType;
+  active: boolean;
+  onClick: (tool: ToolType) => void;
 }
 
-const ToolButton: React.FC<ToolButtonProps> = ({ icon, label, onClick }) => (
+const ToolButton: React.FC<ToolButtonProps> = ({ icon, label, tool, active, onClick }) => (
   <Button 
-    variant="outline" 
-    className="flex flex-col items-center gap-1 p-3 h-auto"
-    onClick={onClick}
+    variant={active ? "default" : "outline"}
+    className={`flex flex-col items-center gap-1 p-3 h-auto ${active ? 'bg-primary text-primary-foreground' : ''}`}
+    onClick={() => onClick(tool)}
   >
     {icon}
     <span className="text-xs">{label}</span>
@@ -41,8 +44,10 @@ const ToolButton: React.FC<ToolButtonProps> = ({ icon, label, onClick }) => (
 
 const DrawerTools: React.FC = () => {
   const { toast } = useToast();
+  const { activeTool, setActiveTool } = useToolStore();
   
-  const handleToolSelect = (tool: string) => {
+  const handleToolSelect = (tool: ToolType) => {
+    setActiveTool(tool);
     toast({
       title: "Tool Selected",
       description: `${tool} tool activated`,
@@ -55,7 +60,7 @@ const DrawerTools: React.FC = () => {
       <DrawerTrigger asChild>
         <Button 
           variant="outline" 
-          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 rounded-full px-6"
+          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 rounded-full px-6 shadow-md"
         >
           <ChevronUp className="mr-2 h-4 w-4" />
           Tools
@@ -63,54 +68,73 @@ const DrawerTools: React.FC = () => {
       </DrawerTrigger>
       <DrawerContent className="max-w-none">
         <DrawerHeader className="text-center">
-          <DrawerTitle>Drawing Tools</DrawerTitle>
+          <DrawerTitle>Architecture Drawing Tools</DrawerTitle>
         </DrawerHeader>
         
-        <div className="flex justify-center gap-4 p-4">
+        <div className="flex justify-center gap-4 p-4 flex-wrap">
           <ToolButton 
             icon={<HandMetal size={24} />} 
             label="Select" 
-            onClick={() => handleToolSelect("Select")}
+            tool="select"
+            active={activeTool === 'select'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<Link size={24} />} 
             label="Connector" 
-            onClick={() => handleToolSelect("Connector")}
+            tool="connector"
+            active={activeTool === 'connector'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<Circle size={24} />} 
             label="Circle" 
-            onClick={() => handleToolSelect("Circle")}
+            tool="circle"
+            active={activeTool === 'circle'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<Square size={24} />} 
             label="Square" 
-            onClick={() => handleToolSelect("Square")}
+            tool="square"
+            active={activeTool === 'square'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<RectangleHorizontal size={24} />} 
             label="Rectangle" 
-            onClick={() => handleToolSelect("Rectangle")}
+            tool="rectangle"
+            active={activeTool === 'rectangle'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<Triangle size={24} />} 
             label="Triangle" 
-            onClick={() => handleToolSelect("Triangle")}
+            tool="triangle"
+            active={activeTool === 'triangle'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<Pencil size={24} />} 
             label="Draw" 
-            onClick={() => handleToolSelect("Draw")}
+            tool="draw"
+            active={activeTool === 'draw'}
+            onClick={handleToolSelect}
           />
           <ToolButton 
             icon={<Eraser size={24} />} 
             label="Erase" 
-            onClick={() => handleToolSelect("Erase")}
+            tool="erase"
+            active={activeTool === 'erase'}
+            onClick={handleToolSelect}
           />
         </div>
         
         <DrawerFooter className="text-center text-sm text-muted-foreground">
-          Drag and drop shapes onto the canvas
+          {activeTool === 'select' ? 'Click to select nodes or agents' : 
+           activeTool === 'draw' ? 'Click and drag to draw on the canvas' : 
+           activeTool === 'erase' ? 'Click on elements to erase them' : 
+           'Click on the canvas to place the selected shape'}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
