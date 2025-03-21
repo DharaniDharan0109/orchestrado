@@ -6,6 +6,7 @@ import '@xyflow/react/dist/style.css';
 import Sidebar from '@/components/Sidebar';
 import PropertyEditor from '@/components/PropertyEditor';
 import FlowCanvas from '@/components/workflow/FlowCanvas';
+import DrawerTools from '@/components/workflow/DrawerTools';
 
 const Index = () => {
   const [showEditor, setShowEditor] = useState(false);
@@ -30,6 +31,7 @@ const Index = () => {
           onNodeClick={onNodeClick}
           showRecommendations={showRecommendations}
         />
+        <DrawerTools />
       </div>
       
       <PropertyEditor 
