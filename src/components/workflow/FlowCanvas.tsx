@@ -36,7 +36,7 @@ const FlowCanvas = ({ onNodeClick, showRecommendations }: FlowCanvasProps) => {
   const { activeTool } = useToolStore();
   const { toast } = useToast();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const { screenToFlowPosition, project } = useReactFlow();
+  const { screenToFlowPosition } = useReactFlow();
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const isDrawingRef = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
